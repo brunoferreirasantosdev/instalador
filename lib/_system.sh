@@ -15,8 +15,8 @@ system_create_user() {
   sleep 2
 
   sudo su - root <<EOF
-  useradd -m -p $(openssl passwd -crypt ${mysql_root_password}) -s /bin/bash -G sudo deploy
-  usermod -aG sudo deploy
+  useradd -m -p $(openssl passwd -crypt ${deploy_password}) -s /bin/bash -G sudo deploybrandx
+  usermod -aG sudo deploybrandx
 EOF
 
   sleep 2
@@ -27,19 +27,58 @@ EOF
 # Arguments:
 #   None
 #######################################
-system_git_clone() {
+system_mv_folder() {
   print_banner
-  printf "${WHITE} 💻 Fazendo download do código whaticket...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Fazendo download do código Whaticket...${GRAY_LIGHT}"
   printf "\n\n"
 
 
   sleep 2
 
-  sudo su - deploy <<EOF
-  git clone ${link_git} /home/deploy/${instancia_add}/
+  sudo su - root <<EOF
+  cp "${PROJECT_ROOT}"/whaticket.zip /home/deploybrandx/${instancia_add}/
+EOF
+  # git clone ${link_git} /home/deploybrandx/${instancia_add}/
+
+  sleep 2
+}
+
+#######################################
+# creates folder
+# Arguments:
+#   None
+#######################################
+system_create_folder() {
+  print_banner
+  printf "${WHITE} 💻 Agora, vamos criar a nova pasta...${GRAY_LIGHT}"
+  printf "\n\n"
+
+  sleep 2
+
+  sudo su - deploybrandx <<EOF 
+  mkdir ${instancia_add}
 EOF
 
   sleep 2
+}
+
+#######################################
+# unzip whaticket
+# Arguments:
+#   None
+#######################################
+system_unzip_whaticket() {
+  print_banner
+  printf "${WHITE} 💻 Fazendo unzip whaticket...${GRAY_LIGHT}"
+  printf "\n\n"
+
+  sleep 2
+
+  sudo su - deploybrandx <<EOF
+  unzip /home/deploybrandx/${instancia_add}/whaticket.zip -d /home/deploybrandx/${instancia_add}
+EOF
+
+  sleep
 }
 
 #######################################
@@ -49,7 +88,7 @@ EOF
 #######################################
 system_update() {
   print_banner
-  printf "${WHITE} 💻 Vamos atualizar o sistema whaticket...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos atualizar o sistema Whaticket...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -71,7 +110,7 @@ EOF
 #######################################
 deletar_tudo() {
   print_banner
-  printf "${WHITE} 💻 Vamos deletar o whaticket...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos deletar o Whaticket...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -93,8 +132,8 @@ EOF
 
 sleep 2
 
-sudo su - deploy <<EOF
- rm -rf /home/deploy/${empresa_delete}
+sudo su - deploybrandx <<EOF
+ rm -rf /home/deploybrandx/${empresa_delete}
  pm2 delete ${empresa_delete}-frontend ${empresa_delete}-backend
  pm2 save
 EOF
@@ -117,12 +156,12 @@ EOF
 #######################################
 configurar_bloqueio() {
   print_banner
-  printf "${WHITE} 💻 Vamos bloquear o whaticket...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos bloquear o Whaticket...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
 
-sudo su - deploy <<EOF
+sudo su - deploybrandx <<EOF
  pm2 stop ${empresa_bloquear}-backend
  pm2 save
 EOF
@@ -144,12 +183,12 @@ EOF
 #######################################
 configurar_desbloqueio() {
   print_banner
-  printf "${WHITE} 💻 Vamos Desbloquear o whaticket...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos Desbloquear o Whaticket...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
 
-sudo su - deploy <<EOF
+sudo su - deploybrandx <<EOF
  pm2 start ${empresa_bloquear}-backend
  pm2 save
 EOF
@@ -170,7 +209,7 @@ EOF
 #######################################
 configurar_dominio() {
   print_banner
-  printf "${WHITE} 💻 Vamos Alterar os Dominios do whaticket...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Vamos Alterar os Dominios do Whaticket...${GRAY_LIGHT}"
   printf "\n\n"
 
 sleep 2
@@ -184,10 +223,10 @@ EOF
 
 sleep 2
 
-  sudo su - deploy <<EOF
-  cd && cd /home/deploy/${empresa_dominio}/frontend
+  sudo su - deploybrandx <<EOF
+  cd && cd /home/deploybrandx/${empresa_dominio}/frontend
   sed -i "1c\REACT_APP_BACKEND_URL=https://${alter_backend_url}" .env
-  cd && cd /home/deploy/${empresa_dominio}/backend
+  cd && cd /home/deploybrandx/${empresa_dominio}/backend
   sed -i "2c\BACKEND_URL=https://${alter_backend_url}" .env
   sed -i "3c\FRONTEND_URL=https://${alter_frontend_url}" .env 
 EOF
@@ -275,7 +314,7 @@ EOF
 #######################################
 system_node_install() {
   print_banner
-  printf "${WHITE} 💻 Instalando nodejs...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Instalando node.js...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -303,7 +342,7 @@ EOF
 #######################################
 system_docker_install() {
   print_banner
-  printf "${WHITE} 💻 Instalando docker...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Instalando redis...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2
@@ -505,7 +544,7 @@ system_nginx_conf() {
 
 sudo su - root << EOF
 
-cat > /etc/nginx/conf.d/deploy.conf << 'END'
+cat > /etc/nginx/conf.d/deploybrandx.conf << 'END'
 client_max_body_size 100M;
 END
 
@@ -521,7 +560,7 @@ EOF
 #######################################
 system_certbot_setup() {
   print_banner
-  printf "${WHITE} 💻 Configurando certbot, Já estamos perto do fim...${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Configurando certbot...${GRAY_LIGHT}"
   printf "\n\n"
 
   sleep 2

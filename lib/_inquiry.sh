@@ -1,20 +1,20 @@
 #!/bin/bash
 
-get_mysql_root_password() {
+# get_mysql_root_password() {
   
-  print_banner
-  printf "${WHITE} 💻 Insira senha para o usuario Deploy e Banco de Dados (Não utilizar caracteres especiais):${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " mysql_root_password
-}
+#   print_banner
+#   printf "${WHITE} 💻 Insira senha para o usuario Deploy e Banco de Dados (Não utilizar caracteres especiais):${GRAY_LIGHT}"
+#   printf "\n\n"
+#   read -p "> " mysql_root_password
+# }
 
-get_link_git() {
+# get_link_git() {
   
-  print_banner
-  printf "${WHITE} 💻 Insira o link do GITHUB do seu whaticket que deseja instalar:${GRAY_LIGHT}"
-  printf "\n\n"
-  read -p "> " link_git
-}
+#   print_banner
+#   printf "${WHITE} 💻 Insira o link do Github da sua instalação que deseja instalar:${GRAY_LIGHT}"
+#   printf "\n\n"
+#   read -p "> " link_git
+# }
 
 get_instancia_add() {
   
@@ -156,8 +156,8 @@ get_alter_backend_port() {
 
 
 get_urls() {
-  get_mysql_root_password
-  get_link_git
+  # get_mysql_root_password
+  # get_link_git
   get_instancia_add
   get_max_whats
   get_max_user
@@ -168,11 +168,11 @@ get_urls() {
   get_redis_port
 }
 
-software_update() {
-  get_empresa_atualizar
-  frontend_update
-  backend_update
-}
+# software_update() {
+#   get_empresa_atualizar
+#   frontend_update
+#   backend_update
+# }
 
 software_delete() {
   get_empresa_delete
@@ -201,24 +201,24 @@ software_dominio() {
 inquiry_options() {
   
   print_banner
-  printf "${WHITE} 💻 Bem vindo(a) ao Gerenciador whaticket - Atendimento sem limites, selecione abaixo a proxima ação!${GRAY_LIGHT}"
+  printf "${WHITE} 💻 Bem vindo(a) ao Whaticket SaaS brandx, Selecione abaixo a proxima ação!${GRAY_LIGHT}"
   printf "\n\n"
-  printf "   [0] Instalar whaticket\n"
-  printf "   [1] Atualizar whaticket\n"
-  printf "   [2] Deletar whaticket\n"
-  printf "   [3] Bloquear whaticket\n"
-  printf "   [4] Desbloquear whaticket\n"
-  printf "   [5] Alter. dominio whaticket\n"
+  printf "   [1] Instalar Whaticket SaaS brandx\n"
+  # printf "   [1] Atualizar Whaticket SaaS brandx\n"
+  printf "   [2] Deletar Whaticket SaaS brandx\n"
+  printf "   [3] Bloquear Whaticket SaaS brandx\n"
+  printf "   [4] Desbloquear Whaticket SaaS brandx\n"
+  printf "   [5] Alter. dominio Whaticket SaaS brandx\n"
   printf "\n"
   read -p "> " option
 
   case "${option}" in
-    0) get_urls ;;
+    1) get_urls ;;
 
-    1) 
-      software_update 
-      exit
-      ;;
+    # 1) 
+    #   software_update 
+    #   exit
+    #   ;;
 
     2) 
       software_delete 
